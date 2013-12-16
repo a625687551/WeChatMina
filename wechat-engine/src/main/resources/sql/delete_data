@@ -1,0 +1,9 @@
+DELETE FROM offline_group_msg;
+DELETE FROM offline_single_msg;
+DELETE FROM group_message;
+DELETE FROM single_message;
+DELETE FROM chat_group_user;
+DELETE FROM chat_group;
+DELETE FROM user_relationship;
+DELETE FROM user_group;
+DELETE FROM `user`;

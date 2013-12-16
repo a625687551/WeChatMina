@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<context:property-placeholder location="classpath:engine.properties" />
+
+	<bean id="loginRequestEncoder"
+		class="edu.buaa.scse.niu.wechat.engine.entity.codec.LoginRequestEncoder">
+	</bean>
+
+	<bean id="loginRequestDecoder"
+		class="edu.buaa.scse.niu.wechat.engine.entity.codec.LoginRequestDecoder">
+	</bean>
+
+	<bean id="loginResponseEncoder"
+		class="edu.buaa.scse.niu.wechat.engine.entity.codec.LoginResponseEncoder">
+	</bean>
+
+	<bean id="loginResponseDecoder"
+		class="edu.buaa.scse.niu.wechat.engine.entity.codec.LoginResponseDecoder">
+	</bean>
+
+	<bean id="singleMsgEncoder"
+		class="edu.buaa.scse.niu.wechat.engine.entity.codec.SingleMessageEncoder"></bean>
+
+	<bean id="singleMsgDecoder"
+		class="edu.buaa.scse.niu.wechat.engine.entity.codec.SingleMessageDecoder"></bean>
+		
+	<bean id="loginReq" class="edu.buaa.scse.niu.wechat.engine.entity.LoginRequest">
+		<property name="userName" value="myname"></property>
+		<property name="password" value="mypwd"></property>
+		<property name="verification" value="12345"></property>
+	</bean>
+
+	<bean id="loginRes" class="edu.buaa.scse.niu.wechat.engine.entity.LoginResponse">
+		<property name="succ" value="true"></property>
+		<property name="user" ref="srcUser"></property>
+	</bean>
+
+	<bean id="srcUser" class="edu.buaa.scse.niu.wechat.engine.entity.User">
+		<property name="userId" value="1"></property>
+		<property name="userName" value="UserA_src"></property>
+		<property name="userNickName" value="UserA"></property>
+		<property name="password" value="12345"></property>
+	</bean>
+	<bean id="destUser" class="edu.buaa.scse.niu.wechat.engine.entity.User">
+		<property name="userId" value="2"></property>
+		<property name="userName" value="UserB_dest"></property>
+		<property name="userNickName" value="UserB"></property>
+		<property name="password" value="12345"></property>
+	</bean>
+
+	<bean id="singleMessage"
+		class="edu.buaa.scse.niu.wechat.engine.entity.msg.SingleMessage">
+		<constructor-arg ref="testBody"></constructor-arg>
+		<constructor-arg ref="destUser"></constructor-arg>
+		<constructor-arg ref="srcUser"></constructor-arg>
+	</bean>
+
+	<bean id="testBody"
+		class="edu.buaa.scse.niu.wechat.engine.entity.msg.msgdata.TextMsgData">
+		<constructor-arg value="This is a text message"></constructor-arg>
+	</bean>
+
+
+
+</beans>

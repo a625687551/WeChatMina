@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<context:property-placeholder location="classpath:constants.properties" ignore-unresolvable="true"/>
+
+	<!-- This makes it possible to specify java.net.SocketAddress values (e.g. 
+		:1234 below) as Strings. They will be converted into java.net.InetSocketAddress 
+		objects by Spring. -->
+	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+		<property name="customEditors">
+			<map>
+				<entry key="java.net.SocketAddress">
+					<bean class="org.apache.mina.integration.beans.InetSocketAddressEditor" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<!-- The IoAcceptor -->
+	<bean id="ioAcceptor" class="org.apache.mina.transport.socket.nio.NioSocketAcceptor"
+		init-method="bind" destroy-method="unbind">
+		<property name="defaultLocalAddress" value="${engine.port}" />
+		<property name="handler" ref="ioHandler" />
+		<property name="reuseAddress" value="true" />
+		<property name="filterChainBuilder" ref="filterChainBuilder" />
+	</bean>
+
+	<!-- the IoFilters -->
+	<!-- 线程池控制 -->
+	<bean id="executorFilter" class="org.apache.mina.filter.executor.ExecutorFilter" />
+
+	<bean id="loggingFilter" class="org.apache.mina.filter.logging.LoggingFilter" />
+
+	<bean id="codecFilter"
+		class="edu.buaa.scse.niu.wechat.engine.mina.filter.ChatEngineFilterFactory"
+		factory-method="getCodecFilter" />
+
+	<bean id="authenFilter"
+		class="edu.buaa.scse.niu.wechat.engine.mina.filter.ChatEngineFilterFactory"
+		factory-method="getAuthenFilter">
+		<constructor-arg ref="authenStateHandler" />
+	</bean>
+
+	<bean id="filterChainBuilder"
+		class="org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder">
+		<property name="filters">
+			<map>
+				<entry key="codecFilter" value-ref="codecFilter" />
+				<entry key="authenFilter" value-ref="authenFilter" />
+				<entry key="loggingFilter" value-ref="loggingFilter" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- IoHandler -->
+	<bean id="ioHandler"
+		class="edu.buaa.scse.niu.wechat.engine.mina.handler.ChatEngineHandlerFactory"
+		factory-method="getIoHandler">
+		<constructor-arg>
+			<map>
+				<entry key="dbIoHandlerCommand" value-ref="dbIoHandlerCommand"></entry>
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<bean id="dbIoHandlerCommand"
+		class="edu.buaa.scse.niu.wechat.engine.mina.handler.DatabaseIoHandlerCommand">
+	</bean>
+
+	<bean id="authenStateHandler"
+		class="edu.buaa.scse.niu.wechat.engine.mina.filter.AuthenticationStateHandler" />
+</beans>

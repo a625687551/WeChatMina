@@ -1,0 +1,14 @@
+Jackson使用：
+每个用于JSON传输的类（包含其中自定义类型的属性）都需要有一个无参构造方法。
+
+MySQL
+卸载MySQL后应检查MySQL服务是否已删除，SC delete MySQL56
+
+getCurrentSession() 返回空指针
+数据库设置中配置事务（标注形式的事务声明）
+<tx:annotation-driven transaction-manager="transactionManager"/>
+hibernate配置中加入：
+hibernate.current_session_context_class=org.springframework.orm.hibernate4.SpringSessionContext
+
+
+延迟加载的属性对象 如果在dao中没有取出来并打印过，则在service层是不能使用的，否则报错

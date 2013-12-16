@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<bean id="srcUser" class="edu.buaa.scse.niu.wechat.engine.entity.Account">
+		<property name="id" value="1"></property>
+		<property name="name" value="UserA_src"></property>
+		<property name="password" value="12345"></property>
+	</bean>
+	<bean id="destUser" class="edu.buaa.scse.niu.wechat.engine.entity.Account">
+		<property name="id" value="2"></property>
+		<property name="name" value="UserB_dest"></property>
+		<property name="password" value="12345"></property>
+	</bean>
+
+	<bean id="singleMessage"
+		class="edu.buaa.scse.niu.wechat.engine.entity.msg.SingleMessage">
+		<constructor-arg ref="testBody"></constructor-arg>
+		<constructor-arg ref="destUser"></constructor-arg>
+		<constructor-arg ref="srcUser"></constructor-arg>
+	</bean>
+
+	<bean id="testBody"
+		class="edu.buaa.scse.niu.wechat.engine.entity.factory.MsgDataFactory" factory-method="newText">
+		<constructor-arg value="This is a text message"></constructor-arg>
+	</bean>
+
+</beans>
